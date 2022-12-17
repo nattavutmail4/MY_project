@@ -1,5 +1,25 @@
-const getUserAsTr = require('../utils/getUserAsTr')
+// const getUserAsTr = require('../utils/getUserAsTr')
+const multer = require('multer')
+const path = require('path') //libary สำหรับอัพโหลดรูป
+const sharp = require('sharp')
 const router = require('express').Router()
+
+// const storage = multer.diskStorage({
+//   destination (req,file,next){
+//      next(null,path.join(__dirname,'../public/uploads'))
+//   },
+//   filename (req,file,next){
+//      next(null,file.originalname)
+//   }
+// })
+// const upload = multer({
+//   storage:storage
+// })
+
+const upload = multer({
+   dest:path.join(__dirname,'../public/uploads') //เข้าถึงตำแหน่งโฟลเดอร์ที่ต้องการอัพไฟล์
+})
+
 const  users = [
   {name:"John Doe",age:18},
   {name:"John Dan",age:28},
@@ -7,8 +27,9 @@ const  users = [
   {name:"Jame Dun",age:38},
 ]
 
+// middlewares
 router.param('id',(req,res,next,id)=>{
-   res.locals.user = users[id-1]
+   res.locals.user = users[id-1] //locals เก็บข้อมูลเป็นgloble
    if(!res.locals.user){
       const err = new Error('ไม่พบข้อมูล')
       err.status=404
@@ -26,30 +47,37 @@ router.get('/',(req,res)=>{
 router.get('/new',(req,res)=>{
   res.render('users-new',{users})
 })
+
 //3.create
-router.post('/',(req,res)=>{
+router.post('/',upload.single('avatar'),async(req,res)=>{
+  await sharp(req.file.path)
+    .resize(200,200) //บังคับปรับขนาดรูปเป็น 200 * 200
+    .jpeg({quality:100}) //ลดคุณภาพรูปให้เป็น70
+    .toFile(path.join(__dirname,`../public/uploads/${Math.round(Math.random()*1E9)}.jpg`))
+    
+  console.log(req.body); //เกิดจากการinputเข้ามา
+  console.log(req.file); //เกิดจากการอัพรูป
   users.push(req.body)
   res.redirect('/users')
 })
 
 //4.show
 router.get('/:id',(req,res)=>{
-   return res.send(`<h1>ชื่อ: ${res.locals.user.name}  อายุ: ${res.locals.user.age}</h1>`)
+  //  return res.send(`<h1>ชื่อ: ${res.locals.user.name}  อายุ: ${res.locals.user.age}</h1>`)
+  res.render('users-new',{user:res.locals.user,id:req.params.id})
 })
 
 //5.edit
 router.get('/:id/edit',(req,res)=>{
-  return res.send(`
-    <form action='/users/${req.params.id}/edit' method='POST'>
-      <input type="text" name="name" placeholder="name" value="${res.locals.user.name}">
-      <input type="text" name="age" placeholder="age"value="${res.locals.user.age}">
-      <button>แก้ไข</button>
-    </form>
-  `)
+  // users[ req.params.id -1]=req.body
+  // res.redirect('/users')
+  res.render('users-new',{user:res.locals.user,id:req.params.id})
+
 })
 
 //6.update
 router.post('/:id/edit',(req,res)=>{
+ console.log(req.body);
  users[ req.params.id -1]=req.body
  res.redirect('/users')
 })

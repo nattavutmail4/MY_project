@@ -13,14 +13,12 @@ block content
         tr
           th ชื่อ
           th อายุ
-          th บันทึกงาน
           th จัดการข้อมูล
       tbody
         each user , i in users
           tr
             td= user.name
             td= user.age
-            td= user.recordCount
             td
               .d-flex.align-items-center
                 a.btn.btn-sm.btn-primary.me-1(href=`/users/${i + 1}`) ดูข้อมูล
