@@ -1,4 +1,5 @@
 const express =require('express') //common (cjs)
+const morgan = require('morgan')
 
 const users = require('./routers/users')
 const index = require('./routers/index')
@@ -8,7 +9,7 @@ const app = express()
 
 
 app.use(express.urlencoded({extended:false})) //req.body form-encod
-
+app.use(morgan('combined'))
 app.use('/',index)
 app.use('/users',users)
 

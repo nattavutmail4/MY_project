@@ -1,10 +1,12 @@
 const { response } = require('express')
 const express =require('express') //common (cjs)
+const morgan = require('morgan')
 
 const port = 8080
 const app = express()
 
 app.use(express.urlencoded({extended:false})) //req.body form-encod
+app.use(morgan('combined'))
 // app.use(express.json()) // req.body.json
 //ตัวอย่างการทำmiddleware
 const shouldBeLoggedIn = (req,res,next)=>{
