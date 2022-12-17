@@ -34,7 +34,6 @@ const  users = [
 ]
 
 app.get('/users/:id',(req,res)=>{
-
     if(Number.isNaN(+req.params.id)){ //แปลงข้อความที่รับมาเป็น number ไหม
       return res.status(400).send({error:"id is not number"})
     }
@@ -42,15 +41,20 @@ app.get('/users/:id',(req,res)=>{
       return res.status(400).send({error:"id is negative or zero"})
     }
 
-
     const user = users[req.params.id -1] //ค้นหาข้อมูลภายใน users
     if(!user){
      return res.status(404).send({error:"Not found"})
+    }
+    if(req.query.type =='text'){
+       return res.status(200).send(` ${user.name}, (${user.age})`)
     }else{
-     return res.status(200).send(user)
+      return res.status(200).send(
+          req.query.field ? user[req.query.field] : user
+      )
     }
 
 })
+
 
 app.get('/dowload',(req,res)=>{
    res.download('./img/christmas.jpg','chirstmas.png') //สำหรับดาวโหลดไฟล์ และเปลี่ยนนามสกุลไฟล์
