@@ -1,4 +1,3 @@
-const getUser = require('../middlewares/getUser')
 const getUserAsTr = require('../utils/getUserAsTr')
 const router = require('express').Router()
 
@@ -9,6 +8,15 @@ const  users = [
   {name:"Jame Dun",age:38},
 ]
 
+router.param('id',(req,res,next,id)=>{
+   res.locals.user = users[id-1]
+   if(!res.locals.user){
+      const err = new Error('ไม่พบข้อมูล')
+      err.status=404
+      return next(err)
+   }
+   return next()
+})
 // 7 RESTFULL' ROUTING
 //1. get
 router.get('/',(req,res)=>{
@@ -50,7 +58,7 @@ router.get('/:id',getUser(users),(req,res)=>{
 })
 
 //5.edit
-router.get('/:id/edit',getUser(users),(req,res)=>{
+router.get('/:id/edit',(req,res)=>{
   return res.send(`
     <form action='/users/${req.params.id}/edit' method='POST'>
       <input type="text" name="name" placeholder="name" value="${res.locals.user.name}">
@@ -61,13 +69,13 @@ router.get('/:id/edit',getUser(users),(req,res)=>{
 })
 
 //6.update
-router.post('/:id/edit',getUser(users),(req,res)=>{
+router.post('/:id/edit',(req,res)=>{
  users[ req.params.id -1]=req.body
  res.redirect('/users')
 })
 
 //7.delete
-router.get('/:id/delete',getUser(users),(req,res)=>{
+router.get('/:id/delete',(req,res)=>{
   users.splice(req.params.id -1,1) // splice ใช้สำหรับลบข้อมูล
   res.redirect('/users')
 
