@@ -4,14 +4,18 @@ const port = 8080
 const app = express()
 
 
-app.get('/',(request,response)=>{
-  response.send('homepage')
+app.get('/',(req,res)=>{
+  res.send('homepage')
 })
 
-app.get('/ping',(request,response)=>{
-  response.send('pong')
+app.get('/ping',(req,res)=>{
+  res.send('pong')
+})
+
+app.get('/abc',(req,res)=>{
+  res.send('def')
 })
 
 app.listen(port,()=>{
-  console.log(`Run server is url http://127.0.0.1:${port}`)
+  console.log(`Run server is url http://localhost:${port}`)
 })
