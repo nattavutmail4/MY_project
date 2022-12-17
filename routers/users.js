@@ -20,20 +20,21 @@ router.param('id',(req,res,next,id)=>{
 // 7 RESTFULL' ROUTING
 //1. get
 router.get('/',(req,res)=>{
-  res.send(`<a href='/users/new'>เพิ่มสมาชิก</a>
-    <table>
-      <thead>
-        <tr>
-          <th>ชื่อ</th>
-          <th>อายุ</th>
-          <th>จัดการข้อมูล</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${getUserAsTr(users)}
-      </tbody>
-    </table>
-  `)
+  res.render('users')
+  // res.send(`<a href='/users/new'>เพิ่มสมาชิก</a>
+  //   <table>
+  //     <thead>
+  //       <tr>
+  //         <th>ชื่อ</th>
+  //         <th>อายุ</th>
+  //         <th>จัดการข้อมูล</th>
+  //       </tr>
+  //     </thead>
+  //     <tbody>
+  //       ${getUserAsTr(users)}
+  //     </tbody>
+  //   </table>
+  // `)
 })
 
 //2.NEW

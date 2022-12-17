@@ -1,6 +1,6 @@
 const express =require('express') //common (cjs)
 const morgan = require('morgan')
-
+const path  = require('path')
 const users = require('./routers/users')
 const index = require('./routers/index')
 
@@ -8,6 +8,8 @@ const port = 8080
 const app = express()
 
 app.set('x-powered-by',false)
+app.set('view engine','pug') // res.render <= pug
+app.set('views',path.join(__dirname,'./views')) // set path res.render <=path
 
 app.use(express.urlencoded({extended:false})) //req.body form-encod
 app.use(morgan('combined'))
