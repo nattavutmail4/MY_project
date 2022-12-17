@@ -7,6 +7,7 @@ const index = require('./routers/index')
 const port = 8080
 const app = express()
 
+app.set('x-powered-by',false)
 
 app.use(express.urlencoded({extended:false})) //req.body form-encod
 app.use(morgan('combined'))

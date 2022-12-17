@@ -1,6 +1,6 @@
 const getUserAsTr = require('../utils/getUserAsTr')
 const router = require('express').Router()
-
+const pug = require('pug')
 const  users = [
   {name:"John Doe",age:18},
   {name:"John Dan",age:28},
