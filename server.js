@@ -8,11 +8,16 @@ const port = 8080
 const app = express()
 
 app.set('x-powered-by',false)
+
+//ใช้สำหรับพวก ejs pug เป็นต้นกรณีที่ไม่ใช้ fontend vuejs reactjs
 app.set('view engine','pug') // res.render <= pug
-app.set('views',path.join(__dirname,'./views')) // set path res.render <=path
+app.set('views',path.join(__dirname,'./views')) // set path res.render <=path /
+
+app.use(express.static(path.join(__dirname,'./public'))) // settig path
 
 app.use(express.urlencoded({extended:false})) //req.body form-encod
 app.use(morgan('combined'))
+
 app.use('/',index)
 app.use('/users',users)
 

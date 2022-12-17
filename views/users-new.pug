@@ -1,0 +1,13 @@
+extends layouts/default
+
+block content
+  h1 #{user ? `แก้ไขผู้ใช้งาน (ID: ${id})` : 'สร้างผู้ใช้งานใหม่'}
+  form(action=`${user ? `/users/${id}/edit` : '/users'}` method="POST" enctype="multipart/form-data")
+    .mb-3
+      label.form-label(for="inputName") ชื่อ:
+      input.form-control(id="inputName" type="text" name="name" value=user ? user.name : '' required)
+    .mb-3
+      label.form-label(for="inputAge") อายุ:
+      input.form-control(id="inputAge" type="number" name="age" value=user ? user.age : '' required)
+    .mb-3
+    button.btn.btn-primary #{user ? 'อัพเดต' : 'สร้างใหม่'}

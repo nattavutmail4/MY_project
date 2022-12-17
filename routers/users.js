@@ -1,6 +1,5 @@
 const getUserAsTr = require('../utils/getUserAsTr')
 const router = require('express').Router()
-const pug = require('pug')
 const  users = [
   {name:"John Doe",age:18},
   {name:"John Dan",age:28},
@@ -20,32 +19,12 @@ router.param('id',(req,res,next,id)=>{
 // 7 RESTFULL' ROUTING
 //1. get
 router.get('/',(req,res)=>{
-  res.render('users')
-  // res.send(`<a href='/users/new'>เพิ่มสมาชิก</a>
-  //   <table>
-  //     <thead>
-  //       <tr>
-  //         <th>ชื่อ</th>
-  //         <th>อายุ</th>
-  //         <th>จัดการข้อมูล</th>
-  //       </tr>
-  //     </thead>
-  //     <tbody>
-  //       ${getUserAsTr(users)}
-  //     </tbody>
-  //   </table>
-  // `)
+  res.render('users',{users})
 })
 
 //2.NEW
 router.get('/new',(req,res)=>{
-  res.send(`
-     <form action='/users' method='POST'>
-      <input type="text" name="name" placeholder="name">
-      <input type="text" name="age" placeholder="age">
-      <button>เพิ่มข้อมูล</button>
-     </form>
-  `)
+  res.render('users-new',{users})
 })
 //3.create
 router.post('/',(req,res)=>{

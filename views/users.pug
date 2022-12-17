@@ -1,7 +1,29 @@
-h1 ผู้ใช้งานทั้งหมด
-table 
- thead 
-  tr 
-   th ชื่อ
-   th อายุ
-   th จัดการข้อมูล
+extends layouts/default
+
+block content
+  .d-flex
+    h1.me-auto ผู้ใช้งานทั้งหมด
+    div
+      a.btn.btn-primary(href="/users/new") สร้างผู้ใช้งานใหม่
+  if users.length == 0
+    p.text-secondary.text-center ไม่พบข้อมูลผู้ใช้งาน
+  else
+    table.table
+      thead
+        tr
+          th ชื่อ
+          th อายุ
+          th บันทึกงาน
+          th จัดการข้อมูล
+      tbody
+        each user , i in users
+          tr
+            td= user.name
+            td= user.age
+            td= user.recordCount
+            td
+              .d-flex.align-items-center
+                a.btn.btn-sm.btn-primary.me-1(href=`/users/${i + 1}`) ดูข้อมูล
+                a.btn.btn-sm.btn-success.me-1(href=`/users/${i + 1}/edit`) แก้ไข
+                a.btn.btn-sm.btn-danger.me-1(href=`/users/${i + 1}/delete`) ลบ
+               
