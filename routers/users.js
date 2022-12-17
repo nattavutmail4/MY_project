@@ -1,20 +1,7 @@
-// const getUserAsTr = require('../utils/getUserAsTr')
-const multer = require('multer')
-const path = require('path') //libary สำหรับอัพโหลดรูป
-const sharp = require('sharp')
 const router = require('express').Router()
-
-// const storage = multer.diskStorage({
-//   destination (req,file,next){
-//      next(null,path.join(__dirname,'../public/uploads'))
-//   },
-//   filename (req,file,next){
-//      next(null,file.originalname)
-//   }
-// })
-// const upload = multer({
-//   storage:storage
-// })
+const path = require('path')//libary สำหรับอัพโหลดรูป
+const multer = require('multer')
+const uploadAvatar = require('../utils/uploadAvatar')
 
 const upload = multer({
    dest:path.join(__dirname,'../public/uploads') //เข้าถึงตำแหน่งโฟลเดอร์ที่ต้องการอัพไฟล์
@@ -38,6 +25,7 @@ router.param('id',(req,res,next,id)=>{
    return next()
 })
 // 7 RESTFULL' ROUTING
+
 //1. get
 router.get('/',(req,res)=>{
   res.render('users',{users})
@@ -50,21 +38,14 @@ router.get('/new',(req,res)=>{
 
 //3.create
 router.post('/',upload.single('avatar'),async(req,res)=>{
-  await sharp(req.file.path)
-    .resize(200,200) //บังคับปรับขนาดรูปเป็น 200 * 200
-    .jpeg({quality:100}) //ลดคุณภาพรูปให้เป็น70
-    .toFile(path.join(__dirname,`../public/uploads/${Math.round(Math.random()*1E9)}.jpg`))
-    
-  console.log(req.body); //เกิดจากการinputเข้ามา
-  console.log(req.file); //เกิดจากการอัพรูป
   users.push(req.body)
+  await uploadAvatar(req,users.length)
   res.redirect('/users')
 })
 
 //4.show
 router.get('/:id',(req,res)=>{
-  //  return res.send(`<h1>ชื่อ: ${res.locals.user.name}  อายุ: ${res.locals.user.age}</h1>`)
-  res.render('users-new',{user:res.locals.user,id:req.params.id})
+  res.render('users-show',{user:res.locals.user,id:req.params.id})
 })
 
 //5.edit
