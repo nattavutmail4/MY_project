@@ -53,7 +53,7 @@ router.post('/',(req,res)=>{
 })
 
 //4.show
-router.get('/:id',getUser(users),(req,res)=>{
+router.get('/:id',(req,res)=>{
    return res.send(`<h1>ชื่อ: ${res.locals.user.name}  อายุ: ${res.locals.user.age}</h1>`)
 })
 
