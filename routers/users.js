@@ -1,3 +1,4 @@
+const getUser = require('../middlewares/getUser')
 const getUserAsTr = require('../utils/getUserAsTr')
 const router = require('express').Router()
 
@@ -8,13 +9,16 @@ const  users = [
   {name:"Jame Dun",age:38},
 ]
 
+// 7 RESTFULL' ROUTING
+//1. get
 router.get('/',(req,res)=>{
-  res.send(`
+  res.send(`<a href='/users/new'>เพิ่มสมาชิก</a>
     <table>
       <thead>
         <tr>
           <th>ชื่อ</th>
           <th>อายุ</th>
+          <th>จัดการข้อมูล</th>
         </tr>
       </thead>
       <tbody>
@@ -24,43 +28,48 @@ router.get('/',(req,res)=>{
   `)
 })
 
-// app.get('/users/create',(req,res)=>{
-//   return res.send(`
-//     <form action="/users" method="post">
-//       <input type="text" name="name" placeholder="name">
-//       <input type="text" name="age" placeholder="age">
-//      <button>Submit</button>
-//     </form>
-//   `)
-// })
+//2.NEW
+router.get('/new',(req,res)=>{
+  res.send(`
+     <form action='/users' method='POST'>
+      <input type="text" name="name" placeholder="name">
+      <input type="text" name="age" placeholder="age">
+      <button>เพิ่มข้อมูล</button>
+     </form>
+  `)
+})
+//3.create
+router.post('/',(req,res)=>{
+  users.push(req.body)
+  res.redirect('/users')
+})
 
-// app.post('/users',(req,res)=>{
-//   users.push(req.body)
-//   return res.redirect(`/users/${users.length}`)
-// })
-// app.get('/users',(req,res)=>{
-//   return res.send(users)
-// })
-// app.get('/users/:id',(req,res)=>{
-//     if(Number.isNaN(+req.params.id)){ //แปลงข้อความที่รับมาเป็น number ไหม
-//       return res.status(400).send({error:"id is not number"})
-//     }
-//     if(req.params.id <=0){
-//       return res.status(400).send({error:"id is negative or zero"})
-//     }
+//4.show
+router.get('/:id',getUser(users),(req,res)=>{
+   return res.send(`<h1>ชื่อ: ${res.locals.user.name}  อายุ: ${res.locals.user.age}</h1>`)
+})
 
-//     const user = users[req.params.id -1] //ค้นหาข้อมูลภายใน users
-//     if(!user){
-//      return res.status(404).send({error:"Not found"})
-//     }
-//     if(req.query.type =='text'){
-//        return res.status(200).send(` ${user.name}, (${user.age})`)
-//     }else{
-//       return res.status(200).send(
-//           req.query.field ? user[req.query.field] : user
-//       )
-//     }
+//5.edit
+router.get('/:id/edit',getUser(users),(req,res)=>{
+  return res.send(`
+    <form action='/users/${req.params.id}/edit' method='POST'>
+      <input type="text" name="name" placeholder="name" value="${res.locals.user.name}">
+      <input type="text" name="age" placeholder="age"value="${res.locals.user.age}">
+      <button>แก้ไข</button>
+    </form>
+  `)
+})
 
-// })
+//6.update
+router.post('/:id/edit',getUser(users),(req,res)=>{
+ users[ req.params.id -1]=req.body
+ res.redirect('/users')
+})
 
+//7.delete
+router.get('/:id/delete',getUser(users),(req,res)=>{
+  users.splice(req.params.id -1,1) // splice ใช้สำหรับลบข้อมูล
+  res.redirect('/users')
+
+})
 module.exports = router

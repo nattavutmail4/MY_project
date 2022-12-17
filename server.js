@@ -15,7 +15,7 @@ app.use('/users',users)
 
 //การทำ 404
 app.use((req,res)=>{
-  res.status(404).send({error:"Not found"})
+  res.status(404).send(`<h1>ไม่พบหน้าที่เรียกขอ</h1>`)
 })
 
 
@@ -26,7 +26,8 @@ app.use((err,req,res,next)=>{
   }
   // res.status(500)
   // res.render('error',{error:err})
-  res.status(err.status ?? 500).send({error:err.message})
+  // res.status(err.status ?? 500).send({error:err.message})
+  res.status(err.status ?? 500).send(`<h1>${err.message ?? 'มีข้อผิดพลาดเกิดขึ้น'}</h1>`)
 })
 
 app.listen(port,()=>{
