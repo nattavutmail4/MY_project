@@ -25,6 +25,33 @@ app.get('/',(req,res)=>{
   })
 })
 
+
+const  users = [
+  {name:"John Doe",age:18},
+  {name:"John Dan",age:28},
+  {name:"Jane Dee",age:48},
+  {name:"Jame Dun",age:38},
+]
+
+app.get('/users/:id',(req,res)=>{
+
+    if(Number.isNaN(+req.params.id)){ //แปลงข้อความที่รับมาเป็น number ไหม
+      return res.status(400).send({error:"id is not number"})
+    }
+    if(req.params.id <=0){
+      return res.status(400).send({error:"id is negative or zero"})
+    }
+
+
+    const user = users[req.params.id -1] //ค้นหาข้อมูลภายใน users
+    if(!user){
+     return res.status(404).send({error:"Not found"})
+    }else{
+     return res.status(200).send(user)
+    }
+
+})
+
 app.get('/dowload',(req,res)=>{
    res.download('./img/christmas.jpg','chirstmas.png') //สำหรับดาวโหลดไฟล์ และเปลี่ยนนามสกุลไฟล์
   // res.send('ok!')
