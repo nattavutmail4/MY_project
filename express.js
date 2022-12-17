@@ -133,6 +133,10 @@ app.get('/test-login',(req,res,next)=>{
   res.send(users)
 })
 
+//การทำ 404
+app.use((req,res)=>{
+  res.status(404).send({error:"Not found"})
+})
 
 // การทำ error
 app.use((err,req,res,next)=>{
