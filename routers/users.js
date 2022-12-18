@@ -1,18 +1,16 @@
 const router = require('express').Router()
+const users = require('../models/users')
+
 const path = require('path')//libary สำหรับอัพโหลดรูป
+const bytes  = require('bytes')
 const multer = require('multer')
-const uploadAvatar = require('../utils/uploadAvatar')
 
 const upload = multer({
-   dest:path.join(__dirname,'../public/uploads') //เข้าถึงตำแหน่งโฟลเดอร์ที่ต้องการอัพไฟล์
+  dest: path.join(__dirname, '../public/uploads'),
+  limits: {
+    fileSize: bytes('2MB')
+  }
 })
-
-const  users = [
-  {name:"John Doe",age:18},
-  {name:"John Dan",age:28},
-  {name:"Jane Dee",age:48},
-  {name:"Jame Dun",age:38},
-]
 
 // middlewares
 router.param('id',(req,res,next,id)=>{
@@ -24,49 +22,24 @@ router.param('id',(req,res,next,id)=>{
    }
    return next()
 })
+
+
 // 7 RESTFULL' ROUTING
-
 //1. get
-router.get('/',(req,res)=>{
-  res.render('users',{users})
-})
-
+router.get('/',require('../controllers/users/index'))
 //2.NEW
-router.get('/new',(req,res)=>{
-  res.render('users-new',{users})
-})
-
+router.get('/new',require('../controllers/users/new'))
 //3.create
-router.post('/',upload.single('avatar'),async(req,res)=>{
-  users.push(req.body)
-  await uploadAvatar(req,users.length)
-  res.redirect('/users')
-})
-
+router.post('/',upload.single('avatar'),require('../controllers/users/create'))
 //4.show
-router.get('/:id',(req,res)=>{
-  res.render('users-show',{user:res.locals.user,id:req.params.id})
-})
-
+router.get('/:id',require('../controllers/users/show'))
 //5.edit
-router.get('/:id/edit',(req,res)=>{
-  // users[ req.params.id -1]=req.body
-  // res.redirect('/users')
-  res.render('users-new',{user:res.locals.user,id:req.params.id})
-
-})
+router.get('/:id/edit',require('../controllers/users/edit'))
 
 //6.update
-router.post('/:id/edit',(req,res)=>{
- console.log(req.body);
- users[ req.params.id -1]=req.body
- res.redirect('/users')
-})
+router.post('/:id/edit',require('../controllers/users/update'))
 
 //7.delete
-router.get('/:id/delete',(req,res)=>{
-  users.splice(req.params.id -1,1) // splice ใช้สำหรับลบข้อมูล
-  res.redirect('/users')
+router.get('/:id/delete',require('../controllers/users/delete'))
 
-})
 module.exports = router
