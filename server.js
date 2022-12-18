@@ -6,6 +6,7 @@ const index = require("./routers/index");
 const client = require("./mongodb/client"); //import client มาใช้
 
 async function startService() {
+
   await client.connect(); //รอการเชื่อมต่อmongodb ว่าได้ไหมถ้าไม่ได้มันจะรันผ่านแต่เรียกใช้งานไม่ได้
   const port = 8080;
   const app = express();
@@ -21,6 +22,7 @@ async function startService() {
   app.use(express.urlencoded({ extended: false })); //req.body form-encod
   // app.use(morgan('combined'))
 
+  //setting routting
   app.use("/", index);
   app.use("/users", users);
 
@@ -41,6 +43,8 @@ async function startService() {
       .status(err.status ?? 500)
       .send(`<h1>${err.message ?? "มีข้อผิดพลาดเกิดขึ้น"}</h1>`);
   });
+
+  //create server
   app.listen(port, () => {
     console.log(`Run server is url http://localhost:${port}`);
   });
