@@ -1,7 +1,10 @@
 extends layouts/default
 
 block content
-  img(src=user.id)
+  img(src=user.avatar)
   ul
     li #[b ชื่อ:] #{user.name}
     li #[b อายุ:] #{user.age}
+  ul
+    each record in user.records
+      li #{record.recordedAt} (Note: #{record.note})

@@ -1,13 +1,14 @@
-const express = require("express"); //common (cjs)
-const morgan = require("morgan");
-const path = require("path");
+const express = require('express') // CommonJS (CJS)
+const mongoose = require('mongoose')
+const path = require('path')
+const morgan = require('morgan')
+
 const users = require("./routers/users");
 const index = require("./routers/index");
-const client = require("./mongodb/client"); //import client มาใช้
 
 async function startService() {
 
-  await client.connect(); //รอการเชื่อมต่อmongodb ว่าได้ไหมถ้าไม่ได้มันจะรันผ่านแต่เรียกใช้งานไม่ได้
+  await mongoose.connect('mongodb://127.0.0.1/manager') //รอการเชื่อมต่อmongodb ว่าได้ไหมถ้าไม่ได้มันจะรันผ่านแต่เรียกใช้งานไม่ได้
   const port = 8080;
   const app = express();
 
@@ -18,9 +19,8 @@ async function startService() {
   app.set("views", path.join(__dirname, "./views")); // set path res.render <=path /
 
   app.use(express.static(path.join(__dirname, "./public"))); // settig path
-
   app.use(express.urlencoded({ extended: false })); //req.body form-encod
-  // app.use(morgan('combined'))
+  app.use(morgan('combined'))
 
   //setting routting
   app.use("/", index);

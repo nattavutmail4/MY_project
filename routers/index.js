@@ -1,7 +1,7 @@
-const router = require('express').Router()
+const express = require('express')
+const router = express.Router()
 
-router.get('/',(req,res)=>{
-  // return res.send(`<h1><a href='/users'>ดูรายชื่อผู้ใช้งาน</a></h1>`)
+router.get('/', (req, res) => {
   res.render('index')
 })
 

@@ -13,15 +13,20 @@ block content
         tr
           th ชื่อ
           th อายุ
+          th บันทึกงาน
           th จัดการข้อมูล
       tbody
-        each user , i in users
+        each user in users
           tr
             td= user.name
             td= user.age
+            td= user.recordCount
             td
               .d-flex.align-items-center
-                a.btn.btn-sm.btn-primary.me-1(href=`/users/${i + 1}`) ดูข้อมูล
-                a.btn.btn-sm.btn-success.me-1(href=`/users/${i + 1}/edit`) แก้ไข
-                a.btn.btn-sm.btn-danger.me-1(href=`/users/${i + 1}/delete`) ลบ
-               
+                a.btn.btn-sm.btn-primary.me-1(href=`/users/${user._id}`) ดูข้อมูล
+                a.btn.btn-sm.btn-success.me-1(href=`/users/${user._id}/edit`) แก้ไข
+                a.btn.btn-sm.btn-danger.me-1(href=`/users/${user._id}/delete`) ลบ
+                form.d-none.d-md-block(action=`/users/${user._id}/record` method="POST")
+                  .input-group
+                    input.form-control(type="text" name="note" placeholder="ระบุหมายเหตุ")
+                    button.btn.btn-secondary บันทึกเวลางาน
